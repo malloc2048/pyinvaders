@@ -28,7 +28,7 @@ class Invaders(object):
     def main_loop(self):
         self.poll_event()
 
-        if SDL_GetTicks() - (self.timer > (1.0 / FPS) * 1000):
+        if SDL_GetTicks() - self.timer > (1.0 / FPS) * 1000:
             self.timer = SDL_GetTicks()
             self.game_update()
             self.gpu_update()

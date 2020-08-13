@@ -16,6 +16,7 @@ class DataSrcDst(Enum):
     SP = 11
 
 
+FRAME_TIME = (1.0 / 60) * 1000
 FPS = 60
 ScreenWidth = 224
 ScreenHeight = 256
@@ -23,3 +24,4 @@ VRAMAddress = 0x2400
 CyclesPerFrame = 2000000 / FPS
 ConfigFilename = '../rom/invaders.cfg'
 HalfCyclesPerFrame = CyclesPerFrame / 2
+VRAM_SIZE = int(ScreenWidth * ScreenHeight / 8)
