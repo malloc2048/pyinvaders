@@ -12,6 +12,9 @@ class Flags(object):
         self.halted = False
         self.interrupt_enabled = False
 
+    def __str__(self):
+        return str(self.__dict__)
+
     def calculate_parity(self, value: np.ubyte):
         bits_set = 0
         for i in range(0, 8):

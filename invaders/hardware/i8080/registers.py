@@ -1,72 +1,75 @@
 import numpy as np
-from invaders.common.constants import DataSrcDst
+from common.constants import DataSrcDst
 
 
 class Registers(object):
     def __init__(self):
-        self.b = np.ubyte(0)
-        self.c = np.ubyte(0)
-        self.d = np.ubyte(0)
-        self.e = np.ubyte(0)
-        self.h = np.ubyte(0)
-        self.l = np.ubyte(0)
-        self.accumulator = np.ubyte(0)
+        self.b = 0
+        self.c = 0
+        self.d = 0
+        self.e = 0
+        self.h = 0
+        self.l = 0
+        self.accumulator = 0
 
-        self.stack_pointer = np.ushort(0)
-        self.program_counter = np.ushort(0)
+        self.stack_pointer = 0
+        self.program_counter = 0
 
-    def read_register(self, reg: np.ubyte) -> np.ushort:
-        if DataSrcDst.B == reg:
+    def __str__(self):
+        return str(self.__dict__)
+
+    def read_register(self, reg):
+        if DataSrcDst.B == DataSrcDst(reg):
             return self.b
-        elif DataSrcDst.C == reg:
+        elif DataSrcDst.C == DataSrcDst(reg):
             return self.c
-        elif DataSrcDst.D == reg:
+        elif DataSrcDst.D == DataSrcDst(reg):
             return self.d
-        elif DataSrcDst.E == reg:
+        elif DataSrcDst.E == DataSrcDst(reg):
             return self.e
-        elif DataSrcDst.H == reg:
+        elif DataSrcDst.H == DataSrcDst(reg):
             return self.h
-        elif DataSrcDst.L == reg:
+        elif DataSrcDst.L == DataSrcDst(reg):
             return self.l
-        elif DataSrcDst.A == reg:
+        elif DataSrcDst.A == DataSrcDst(reg):
             return self.accumulator
-        elif DataSrcDst.BC == reg:
+        elif DataSrcDst.BC == DataSrcDst(reg):
             bc = self.b << 0x08 | self.c
             return bc
-        elif DataSrcDst.DE == reg:
+        elif DataSrcDst.DE == DataSrcDst(reg):
             de = self.d << 0x08 | self.e
             return de
-        elif DataSrcDst.HL == reg:
+        elif DataSrcDst.HL == DataSrcDst(reg):
             hl = self.h << 0x08 | self.l
             return hl
-        elif DataSrcDst.SP == reg:
+        elif DataSrcDst.SP == DataSrcDst(reg):
             return self.stack_pointer
         else:
             return np.ushort(0)
 
-    def write_register(self, reg: np.ubyte, data: np.ushort):
-        if DataSrcDst.B == reg:
-            self.b = data & 0x00ff
-        elif DataSrcDst.C == reg:
-            self.c = data & 0x00ff
-        elif DataSrcDst.D == reg:
-            self.d = data & 0x00ff
-        elif DataSrcDst.E == reg:
-            self.e = data & 0x00ff
-        elif DataSrcDst.H == reg:
-            self.h = data & 0x00ff
-        elif DataSrcDst.L == reg:
-            self.l = data & 0x00ff
-        elif DataSrcDst.A == reg:
-            self.accumulator = data & 0x00ff
-        elif DataSrcDst.BD == reg:
-            self.c = data & 0x00ff
-            self.b = data >> 0x08
-        elif DataSrcDst.DE == reg:
-            self.d = data & 0x00ff
-            self.e = data >> 0x08
-        elif DataSrcDst.HL == reg:
-            self.l = data & 0x00ff
-            self.h = data >> 0x08
-        elif DataSrcDst.SP == reg:
-            self.stack_pointer = data
+    def write_register(self, reg, data):
+        if DataSrcDst.B == DataSrcDst(reg):
+            self.b = int(data & 0x00ff)
+        elif DataSrcDst.C == DataSrcDst(reg):
+            self.c = int(data & 0x00ff)
+        elif DataSrcDst.D == DataSrcDst(reg):
+            self.d = int(data & 0x00ff)
+        elif DataSrcDst.E == DataSrcDst(reg):
+            self.e = int(data & 0x00ff)
+        elif DataSrcDst.H == DataSrcDst(reg):
+            self.h = int(data & 0x00ff)
+        elif DataSrcDst.L == DataSrcDst(reg):
+            self.l = int(data & 0x00ff)
+        elif DataSrcDst.A == DataSrcDst(reg):
+            self.accumulator = int(data & 0x00ff)
+        elif DataSrcDst.BC == DataSrcDst(reg):
+            self.c = int(data & 0x00ff)
+            self.b = int(data >> 0x08)
+        elif DataSrcDst.DE == DataSrcDst(reg):
+            self.e = int(data & 0x00ff)
+            self.d = int(data >> 0x08)
+        elif DataSrcDst.HL == DataSrcDst(reg):
+            self.l = int(data & 0x00ff)
+            self.h = int(data >> 0x08)
+        elif DataSrcDst.SP == DataSrcDst(reg):
+            self.stack_pointer = int(data)

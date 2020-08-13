@@ -1,3 +1,41 @@
+import logging
+import numpy as np
+
+
 class Memory(object):
     def __init__(self):
-        pass
+        self.rom_size = 0x2000
+        self.rom = [np.ubyte(0) for _ in range(self.rom_size)]
+        self.ram = [np.ubyte(0) for _ in range(0x10000)]
+
+    def load_rom(self, rom_filename: str):
+        try:
+            with open(rom_filename, 'rb') as rom:
+                self.rom = rom.read(self.rom_size)
+        except FileNotFoundError:
+            logging.error('rom file not found {}'.format(rom_filename))
+
+    def read_byte(self, address: np.uint16) -> np.ubyte:
+        try:
+            if address < self.rom_size:
+                return self.rom[address]
+            else:
+                return self.ram[address - self.rom_size]
+        except IndexError:
+            logging.warning('address out of memory range {}'.format(hex(address)))
+        except TypeError:
+            if address is None:
+                logging.warning('type error address is None ')
+
+    def read_word(self, address: np.ushort) -> np.ushort:
+        return np.ushort(self.read_byte(address) | (self.read_byte(address + 1) << 0x08))
+
+    def write_byte(self, address: np.ushort, data: np.ubyte):
+        if address >= self.rom_size:
+            self.ram[address - self.rom_size] = data
+        else:
+            logging.warning('attempt to write to ROM {}'.format(hex(address)))
+
+    def write_word(self, address: np.ushort, data: np.ushort):
+        self.write_byte(address, data)
+        self.write_byte(address + 1, data >> 0x08)
